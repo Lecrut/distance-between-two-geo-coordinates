@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import InputField from '../components/InputField.vue'
 import { useCalculateStore } from '../stores/calculate'
+import { storeToRefs } from 'pinia'
 
 const lat1 = ref<number | null>(null)
 const lon1 = ref<number | null>(null)
@@ -9,7 +10,7 @@ const lat2 = ref<number | null>(null)
 const lon2 = ref<number | null>(null)
 
 const calculateStore = useCalculateStore()
-const { loading, error } = calculateStore
+const { loading, error } = storeToRefs(calculateStore)
 
 async function count() {
   if (lat1.value === null || lon1.value === null || lat2.value === null || lon2.value === null) {
@@ -39,9 +40,9 @@ async function count() {
     <InputField label="Point A" v-model:lat="lat1" v-model:lon="lon1" />
     <InputField label="Point B" v-model:lat="lat2" v-model:lon="lon2" />
 
-    <a class="button" @click="count">
+    <button class="button" @click="count">
       {{ loading ? 'Calculating...' : 'Calculate' }}
-    </a>
+    </button>
 
     <p v-if="error" class="error">{{ error }}</p>
   </div>

@@ -17,13 +17,14 @@ export const useCalculateStore = defineStore('calculate', () => {
   const loading = ref(false)
   const result = ref<CalculateResult | null>(null)
   const error = ref<string | null>(null)
+  const serverLink = 'http://localhost:8080/'
 
   async function fetchDistance(payload: CalculatePayload) {
     loading.value = true
     error.value = null
 
     try {
-      const response = await fetch('/api/server.php', {
+      const response = await fetch(serverLink, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,10 +32,21 @@ export const useCalculateStore = defineStore('calculate', () => {
         body: JSON.stringify(payload),
       })
 
-      const data = (await response.json()) as CalculateResult & { error?: string }
+      const contentType = response.headers.get('content-type') || ''
+
+      let data: (CalculateResult & { error?: string }) | null = null
+
+      if (contentType.includes('application/json')) {
+        data = (await response.json()) as CalculateResult & { error?: string }
+      } else {
+        const text = await response.text()
+        throw new Error(
+          `Non-JSON response from server: ${response.status} ${response.statusText}\n${text.slice(0, 512)}`,
+        )
+      }
 
       if (!response.ok) {
-        throw new Error(data.error ?? 'Failed to calculate distance')
+        throw new Error(data?.error ?? 'Failed to calculate distance')
       }
 
       result.value = {
