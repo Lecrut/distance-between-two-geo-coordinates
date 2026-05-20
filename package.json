@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"vite\" \"php -S localhost:8000 -t api\"",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -15,6 +15,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "pinia": "^3.0.4",
     "vue": "beta",
     "vue-router": "^5.0.4"
   },
@@ -24,6 +25,7 @@
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.9.1",
+    "concurrently": "^9.2.1",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.60.0",
