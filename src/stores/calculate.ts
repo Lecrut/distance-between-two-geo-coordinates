@@ -17,14 +17,15 @@ export const useCalculateStore = defineStore('calculate', () => {
   const loading = ref(false)
   const result = ref<CalculateResult | null>(null)
   const error = ref<string | null>(null)
-  const serverLink = 'http://localhost:8080/'
-
   async function fetchDistance(payload: CalculatePayload) {
     loading.value = true
     error.value = null
+    result.value = null
+
+    const primaryUrl = 'http://localhost:8000/server.php'
 
     try {
-      const response = await fetch(serverLink, {
+      const response = await fetch(primaryUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

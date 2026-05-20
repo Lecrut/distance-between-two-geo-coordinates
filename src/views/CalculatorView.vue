@@ -31,6 +31,9 @@ async function count() {
     console.error('Calculation failed:', error)
   }
 }
+// todo: add result display
+// todo: add error display - same as in results page
+// todo: add input validation - lat: -90 to 90, lon: -180 to 180
 </script>
 
 <template>
@@ -40,7 +43,7 @@ async function count() {
     <InputField label="Point A" v-model:lat="lat1" v-model:lon="lon1" />
     <InputField label="Point B" v-model:lat="lat2" v-model:lon="lon2" />
 
-    <button class="button" @click="count">
+    <button type="button" class="button" :disabled="loading" @click="count">
       {{ loading ? 'Calculating...' : 'Calculate' }}
     </button>
 
