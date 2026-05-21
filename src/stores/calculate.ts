@@ -7,6 +7,13 @@ export const useCalculateStore = defineStore('calculate', () => {
   const loading = ref(false)
   const result = ref<CalculateResult | null>(null)
   const error = ref<string | null>(null)
+
+  const resetStore = () => {
+    loading.value = false
+    result.value = null
+    error.value = null
+  }
+
   async function fetchDistance(payload: CalculatePayload) {
     loading.value = true
     error.value = null
@@ -61,6 +68,7 @@ export const useCalculateStore = defineStore('calculate', () => {
     loading,
     result,
     error,
+    resetStore,
     fetchDistance,
   }
 })

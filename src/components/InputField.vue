@@ -34,7 +34,7 @@ const lonError = computed(() =>
           placeholder="ex. 52.2297"
           :class="{ invalid: lat !== null && !isLatValid }"
         />
-        <p v-if="latError" class="error">{{ latError }}</p>
+        <p class="error" :class="{ visible: Boolean(latError) }">{{ latError || ' ' }}</p>
       </div>
 
       <div class="input-wrapper">
@@ -48,7 +48,7 @@ const lonError = computed(() =>
           placeholder="ex. 21.0122"
           :class="{ invalid: lon !== null && !isLonValid }"
         />
-        <p v-if="lonError" class="error">{{ lonError }}</p>
+        <p class="error" :class="{ visible: Boolean(lonError) }">{{ lonError || ' ' }}</p>
       </div>
     </div>
   </fieldset>
@@ -105,7 +105,13 @@ input {
 
 .error {
   margin: 4px 0 0;
+  min-height: 1.2em;
   color: #b00020;
   font-size: 0.8rem;
+  visibility: hidden;
+}
+
+.error.visible {
+  visibility: visible;
 }
 </style>

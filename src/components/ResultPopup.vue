@@ -8,6 +8,10 @@ const props = defineProps<{
   error: string | null
 }>()
 
+const emit = defineEmits<{
+  close: () => void
+}>()
+
 const isOpen = ref(false)
 
 watch(
@@ -26,6 +30,7 @@ watch(
 const title = computed(() => (props.error ? 'Error' : 'Result'))
 
 function closePopup() {
+  emit('close')
   isOpen.value = false
 }
 </script>
@@ -38,6 +43,7 @@ function closePopup() {
       <p v-if="error" class="message error">{{ error }}</p>
 
       <div v-else-if="result" class="message result">
+        <p>Distance between two points is:</p>
         <p><strong>Kilometers:</strong> {{ result.distance_kilometers.toFixed(3) }}</p>
         <p><strong>Meters:</strong> {{ result.distance_meters.toFixed(0) }}</p>
       </div>
@@ -62,16 +68,25 @@ function closePopup() {
   max-width: 90vw;
   padding: 20px;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
   background: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+.popup h2 {
+  margin: 0;
+}
+
 .message {
-  margin: 12px 0 16px;
+  margin: 0;
 }
 
 .error {
-  color: #b00020;
+  color: red;
 }
 
 .result p {

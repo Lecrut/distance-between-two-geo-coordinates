@@ -51,7 +51,7 @@ function distance_calculator($lat1, $lon1, $lat2, $lon2) {
 $distance = distance_calculator($lat1, $lon1, $lat2, $lon2);
 $meter = $distance * 1000; 
 echo json_encode([
-    'distance_kilometers' => round($distance, 2), 
-    'distance_meters' => round($meter)
+    'distance_kilometers' => round($distance, 3), 
+    'distance_meters' => round($meter, 0),
     ]);
 ?>

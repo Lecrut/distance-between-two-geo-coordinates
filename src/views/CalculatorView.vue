@@ -51,11 +51,21 @@ async function count() {
     console.error('Calculation failed:', error)
   }
 }
+
+function closeResultPopup() {
+  lat1.value = null
+  lon1.value = null
+  lat2.value = null
+  lon2.value = null
+  calculateStore.resetStore()
+}
 </script>
 
 <template>
   <div class="calculator">
     <h1>Distance Calculator</h1>
+
+    <p>Enter the coordinates of the points to calculate the distance.</p>
 
     <InputField label="Point A" v-model:lat="lat1" v-model:lon="lon1" />
     <InputField label="Point B" v-model:lat="lat2" v-model:lon="lon2" />
@@ -64,7 +74,7 @@ async function count() {
       {{ loading ? 'Calculating...' : 'Calculate' }}
     </button>
 
-    <ResultPopup :loading="loading" :result="result" :error="error" />
+    <ResultPopup :loading="loading" :result="result" :error="error" @close="closeResultPopup" />
   </div>
 </template>
 
@@ -89,5 +99,10 @@ async function count() {
   background: greenyellow;
   color: black;
   transition: ease-in 0.3s;
+}
+
+.button:disabled {
+  background: gray;
+  cursor: not-allowed;
 }
 </style>
