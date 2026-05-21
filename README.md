@@ -50,3 +50,12 @@ bun run build
 ```sh
 bun lint
 ```
+
+### Tests
+
+The project includes basic example tests in `tests/unit` for Vitest and `tests/php` for PHP.
+
+```sh
+bun run test:unit
+bun run test:php
+```
