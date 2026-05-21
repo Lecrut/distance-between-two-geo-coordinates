@@ -1,6 +1,10 @@
 # distance-calculator
 
-This template should help get you started developing with Vue 3 in Vite.
+This app calculates the distance between two geographic points.
+
+To run it locally, make sure PHP is installed from https://www.php.net/downloads.php.
+
+When you run `bun run dev`, the frontend app and the PHP server start in parallel.
 
 ## Recommended IDE Setup
 
