@@ -1,17 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-
-type CalculatePayload = {
-  lat1: number
-  lon1: number
-  lat2: number
-  lon2: number
-}
-
-type CalculateResult = {
-  distance_kilometers: number
-  distance_meters: number
-}
+import type { CalculatePayload } from '../models/CalculatePayload'
+import type { CalculateResult } from '../models/CalculateResult'
 
 export const useCalculateStore = defineStore('calculate', () => {
   const loading = ref(false)

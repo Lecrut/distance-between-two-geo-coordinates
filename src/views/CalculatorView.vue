@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import InputField from '../components/InputField.vue'
+import ResultPopup from '../components/ResultPopup.vue'
 import { useCalculateStore } from '../stores/calculate'
 import { storeToRefs } from 'pinia'
 
@@ -10,11 +11,30 @@ const lat2 = ref<number | null>(null)
 const lon2 = ref<number | null>(null)
 
 const calculateStore = useCalculateStore()
-const { loading, error } = storeToRefs(calculateStore)
+const { loading, error, result } = storeToRefs(calculateStore)
+
+const hasValidCoordinates = computed(() => {
+  const latitudeValues = [lat1.value, lat2.value]
+  const longitudeValues = [lon1.value, lon2.value]
+
+  const latitudeValid = latitudeValues.every(
+    (value) => value !== null && value >= -90 && value <= 90,
+  )
+  const longitudeValid = longitudeValues.every(
+    (value) => value !== null && value >= -180 && value <= 180,
+  )
+
+  return latitudeValid && longitudeValid
+})
 
 async function count() {
   if (lat1.value === null || lon1.value === null || lat2.value === null || lon2.value === null) {
     console.log('Please fill in all fields before calculating.')
+    return
+  }
+
+  if (!hasValidCoordinates.value) {
+    console.log('Latitude must be between -90 and 90 and longitude must be between -180 and 180.')
     return
   }
 
@@ -31,9 +51,6 @@ async function count() {
     console.error('Calculation failed:', error)
   }
 }
-// todo: add result display
-// todo: add error display - same as in results page
-// todo: add input validation - lat: -90 to 90, lon: -180 to 180
 </script>
 
 <template>
@@ -43,11 +60,11 @@ async function count() {
     <InputField label="Point A" v-model:lat="lat1" v-model:lon="lon1" />
     <InputField label="Point B" v-model:lat="lat2" v-model:lon="lon2" />
 
-    <button type="button" class="button" :disabled="loading" @click="count">
+    <button type="button" class="button" :disabled="loading || !hasValidCoordinates" @click="count">
       {{ loading ? 'Calculating...' : 'Calculate' }}
     </button>
 
-    <p v-if="error" class="error">{{ error }}</p>
+    <ResultPopup :loading="loading" :result="result" :error="error" />
   </div>
 </template>
 
@@ -72,10 +89,5 @@ async function count() {
   background: greenyellow;
   color: black;
   transition: ease-in 0.3s;
-}
-
-.error {
-  margin-top: 16px;
-  color: #b00020;
 }
 </style>

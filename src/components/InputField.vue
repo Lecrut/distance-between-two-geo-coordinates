@@ -1,8 +1,21 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 defineProps<{ label: string }>()
 
 const lat = defineModel<number | null>('lat')
 const lon = defineModel<number | null>('lon')
+
+const isLatValid = computed(() => lat.value === null || (lat.value >= -90 && lat.value <= 90))
+const isLonValid = computed(() => lon.value === null || (lon.value >= -180 && lon.value <= 180))
+
+const latError = computed(() =>
+  isLatValid.value || lat.value === null ? '' : 'Latitude must be between -90 and 90.',
+)
+
+const lonError = computed(() =>
+  isLonValid.value || lon.value === null ? '' : 'Longitude must be between -180 and 180.',
+)
 </script>
 
 <template>
@@ -19,7 +32,9 @@ const lon = defineModel<number | null>('lon')
           max="90"
           step="any"
           placeholder="ex. 52.2297"
+          :class="{ invalid: lat !== null && !isLatValid }"
         />
+        <p v-if="latError" class="error">{{ latError }}</p>
       </div>
 
       <div class="input-wrapper">
@@ -31,7 +46,9 @@ const lon = defineModel<number | null>('lon')
           max="180"
           step="any"
           placeholder="ex. 21.0122"
+          :class="{ invalid: lon !== null && !isLonValid }"
         />
+        <p v-if="lonError" class="error">{{ lonError }}</p>
       </div>
     </div>
   </fieldset>
@@ -80,5 +97,15 @@ input {
   border: 1px solid grey;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.invalid {
+  border-color: #b00020;
+}
+
+.error {
+  margin: 4px 0 0;
+  color: #b00020;
+  font-size: 0.8rem;
 }
 </style>
